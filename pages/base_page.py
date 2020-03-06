@@ -12,6 +12,7 @@ class BasePage:
 
     def __init__(self, browser, url, timeout=10):
         self.browser = browser
+        self.browser.maximize_window()
         self.browser.implicitly_wait(timeout)
         self.url = url
 
