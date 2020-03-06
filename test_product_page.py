@@ -50,7 +50,6 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page.should_not_be_success_message()
 
 
-# @pytest.mark.skip
 @pytest.mark.guest
 def test_guest_cant_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
@@ -59,7 +58,6 @@ def test_guest_cant_see_success_message(browser):
     page.should_not_be_success_message()
 
 
-# @pytest.mark.skip
 @pytest.mark.guest
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
@@ -70,62 +68,19 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     page.should_disappear_success_message()
 
 
-
-# @pytest.mark.guest
-# def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
-#     # 1 Открываем страницу товара
-#     page = ProductPage(browser, link_of_guest)
-#     page.open()
-#     # 2 Добавляем товар в корзину
-#     page.add_to_basket()
-#     # 3 Проверяем, что нет сообщения об успехе с помощью is_not_element_present
-#     assert page.not_message_success_add_to_cart_present(), 'Тестовый гость видит сообщение о добавлении в корзину'
-#
-# @pytest.mark.guest
-# def test_guest_cant_see_success_message(browser):
-#     # 1 Открываем страницу товара
-#     page = ProductPage(browser, link_of_guest)
-#     page.open()
-#     # 2 Проверяем, что нет сообщения об успехе с помощью is_not_element_present
-#     assert page.not_message_success_add_to_cart_present(), 'Тестовый гость увидет сообщение о успехе'
-#
-# @pytest.mark.guest
-# def test_message_disappeared_after_adding_product_to_basket(browser):
-#     # 1 Открываем страницу товара
-#     page = ProductPage(browser, link_of_guest)
-#     page.open()
-#     # 2 Добавляем товар в корзину
-#     page.add_to_basket()
-#     sleep(5)
-#     # 3 Проверяем, что нет сообщения об успехе с помощью is_disappeared
-#     assert page.not_message_success_add_to_cart_disappeared(), 'тестовое сообщение НЕ исчезло после добавления товара в корзину'
+@pytest.mark.login_link
+def test_guest_should_see_login_link_on_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@pytest.mark.login_link
+def test_guest_can_go_to_login_page_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
+    page.go_to_login_page()
 
