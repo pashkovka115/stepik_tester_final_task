@@ -29,3 +29,5 @@ class ProductPageLocators:
 
     PRODUCT_TITLE = (By.CSS_SELECTOR, 'h1')
     PRODUCT_PRICE = (By.CSS_SELECTOR, 'h1 + p')
+
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, "div.alertinner")
