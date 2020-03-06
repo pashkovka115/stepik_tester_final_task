@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .locators import BasePageLocators
+from .locators import BasePageLocators, BasketPageLocators
 
 
 
@@ -56,9 +56,24 @@ class BasePage:
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
 
+    def go_to_basket_page(self):
+        link = self.browser.find_element(*BasketPageLocators.LINK_BASKET)
+        link.click()
+
+
+    def empty_basket(self):
+        text_basket = self.browser.find_element(*BasketPageLocators.BASKET).text
+        assert 'basket is empty' in text_basket, f'Корзина НЕ пуста. Ожидается "basket is empty". Факт: {text_basket}'
+
+
 
     def should_be_login_link(self):
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+
+
+    def current_language(self):
+        """ Язык в настройках браузера (не сайта) """
+        return self.browser.execute_script("return window.navigator.userLanguage || window.navigator.language")
 
 
     def solve_quiz_and_get_code(self):
