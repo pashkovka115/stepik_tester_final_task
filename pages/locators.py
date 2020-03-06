@@ -15,3 +15,10 @@ class LoginPageLocators:
     REGISTER_PASS = (By.CSS_SELECTOR, '#register_form input[name="registration-password1"]')
     REGISTER_PASS_CONFIRM = (By.CSS_SELECTOR, '#register_form input[name="registration-password2"]')
 
+
+class ProductPageLocators:
+    ADD_TO_BASKET_FORM = (By.CSS_SELECTOR, '#add_to_basket_form')
+    ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, '#add_to_basket_form button')
+
+    MESSAGES_INFO = (By.CSS_SELECTOR, '#messages > div')
+
