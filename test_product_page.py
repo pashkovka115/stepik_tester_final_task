@@ -1,8 +1,6 @@
 import time
 from random import randint
-
 import pytest
-
 from .pages.locators import LoginPageLocators
 from .pages.login_page import LoginPage
 from .pages.product_page import ProductPage
@@ -28,6 +26,7 @@ link_of_guest = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_
 
 
 @pytest.mark.guest
+@pytest.mark.xfail
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
@@ -38,6 +37,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
 
 
 @pytest.mark.guest
+@pytest.mark.xfail
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
@@ -58,6 +58,7 @@ def test_guest_should_see_login_link_on_product_page(browser):
 
 
 @pytest.mark.login_link
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
@@ -67,16 +68,41 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
 
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
-    # 1 Гость открывает страницу товара
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
     page.open()
-    # 2 Переходит в корзину по кнопке в шапке
     page.go_to_basket_page()
-    # 3 Ожидаем, что в корзине нет товаров
-    # 4 Ожидаем, что есть текст о том что корзина пуста
     page.empty_basket()
+
+
+
+@pytest.mark.need_review
+@pytest.mark.parametrize('link', links)
+def test_user_can_add_product_to_basket(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_basket()
+    page.should_be_message_add_to_basket()
+
+    page.title_page_mutch_title_basket()
+    page.price_page_mutch_price_basket()
+
+
+
+@pytest.mark.need_review
+@pytest.mark.parametrize('link', links)
+def test_guest_can_add_product_to_basket(browser, link):
+    link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019'
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_basket()
+    page.should_be_message_add_to_basket()
+
+    page.title_page_mutch_title_basket()
+    page.price_page_mutch_price_basket()
+
 
 
 @pytest.mark.register_and_by
@@ -87,14 +113,10 @@ class TestUserAddToBasketFromProductPage:
         link = 'http://selenium1py.pythonanywhere.com/ru/accounts/login/'
         email = 'uyf' + str(time.time()) + "@fakemail.org"
         passwd = 'adsv' + str(randint(111111111, 9999999999)) + 'fr'
-        # 1 открыть страницу регистрации
         page = LoginPage(browser, link)
         page.open()
-        # 2 зарегистрировать нового пользователя
         page.register_new_user(email=email, password=passwd)
-        # 3 проверить, что пользователь залогинен
         page.is_element_present(*LoginPageLocators.LOGOUT_LINK)
-
 
 
     @pytest.mark.guest
@@ -105,7 +127,6 @@ class TestUserAddToBasketFromProductPage:
         page.should_not_be_success_message()
 
 
-    # @pytest.mark.parametrize('link', links)
     def test_user_can_add_product_to_basket(self, browser):
         link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019'
         page = ProductPage(browser, link)
@@ -113,42 +134,5 @@ class TestUserAddToBasketFromProductPage:
         page.add_to_basket()
         page.should_be_message_add_to_basket()
 
-        title_page = page.get_product_title_of_page()
-        title_basket = page.get_product_title_from_message_basket()
-
-        price_page = page.get_product_price_of_page()
-        price_basket = page.get_product_price_from_message_basket()
-
-        assert title_page == title_basket, f'Название товара не соответствует названию в корзине {link}. Ожидается: "{title_page}". Фактически: "{title_basket}"'
-        assert price_page == price_basket, f'Цена на странице не соответствует цене в корзине {link}. Ожидается: {price_page}. Фактически: {price_basket}"'
-
-
-
-# #######################################################################################
-# На это не смотри, это для будущих побед
-# @pytest.mark.login
-# @pytest.mark.skip
-# class TestLoginFromProductPage():
-#     """ Это только пример """
-#
-#
-#     @pytest.fixture(scope="function", autouse=True)
-#     def setup(self):
-#         # self.product = ProductFactory(title="Best book created by robot")
-#         # создаем по апи
-#         self.link = self.product.link
-#         yield
-#         # после этого ключевого слова начинается teardown
-#         # выполнится после каждого теста в классе
-#         # удаляем те данные, которые мы создали
-#         self.product.delete()
-#
-#
-#     def test_guest_can_go_to_login_page_from_product_page(self, browser):
-#         page = ProductPage(browser, self.link)
-#         # дальше обычная реализация теста
-#
-#
-#     def test_guest_should_see_login_link(self, browser):
-#         page = ProductPage(browser, self.link)
-#         # дальше обычная реализация теста
+        page.title_page_mutch_title_basket()
+        page.price_page_mutch_price_basket()

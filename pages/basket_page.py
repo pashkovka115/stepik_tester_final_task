@@ -4,5 +4,4 @@ from pages.locators import BasketPageLocators
 
 
 class BasketPage(BasePage):
-
     pass

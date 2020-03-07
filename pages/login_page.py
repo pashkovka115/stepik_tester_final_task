@@ -1,5 +1,3 @@
-from time import sleep
-
 from .base_page import BasePage
 from .locators import LoginPageLocators
 
@@ -26,7 +24,6 @@ class LoginPage(BasePage):
 
 
     def register_new_user(self, email, password):
-
         email_input = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL)
         email_input.clear()
         email_input.send_keys(email)
@@ -41,7 +38,3 @@ class LoginPage(BasePage):
 
         button = self.browser.find_element(*LoginPageLocators.REGISTER_FORM_BUTTON)
         button.click()
-
-
-
-
